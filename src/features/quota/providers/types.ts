@@ -6,6 +6,7 @@
  */
 
 import type { TFunction } from 'i18next';
+import type { QoderQuotaState } from '@/services/api/qoderQuota';
 import type {
   AntigravityQuotaState,
   AuthFileItem,
@@ -20,10 +21,12 @@ import type {
 export type QuotaUpdater<T> = T | ((prev: T) => T);
 
 export type QuotaProviderType =
-  'antigravity' | 'claude' | 'codex' | 'devin' | 'kimi' | 'xai' | 'meta';
+  'antigravity' | 'claude' | 'codex' | 'devin' | 'kimi' | 'xai' | 'meta' | 'qoder';
 
 /** useQuotaStore 的结构契约（storeSelector/storeSetter 依赖）。 */
 export interface QuotaStore {
+  qoderQuota: Record<string, QoderQuotaState>;
+  setQoderQuota: (updater: QuotaUpdater<Record<string, QoderQuotaState>>) => void;
   antigravityQuota: Record<string, AntigravityQuotaState>;
   claudeQuota: Record<string, ClaudeQuotaState>;
   codexQuota: Record<string, CodexQuotaState>;

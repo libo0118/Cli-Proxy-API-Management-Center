@@ -1,4 +1,25 @@
 {
+  "qoder_quota": {
+    "idle": "Загрузить кредиты",
+    "loading": "Загрузка кредитов",
+    "load_failed": "Ошибка загрузки: {{message}}",
+    "empty_title": "Нет учётных данных Qoder",
+    "empty_desc": "Добавьте Qoder для просмотра кредитов",
+    "empty_data": "Нет данных о кредитах",
+    "invalid_data": "Некорректные данные",
+    "missing_index": "Нет индекса учётных данных",
+    "remaining": "Осталось {{amount}} Credits",
+    "used_total": "Использовано {{used}} / {{total}}",
+    "used_unknown": "Использовано {{used}} · Лимит не указан",
+    "expires": "Истекает: {{date}}",
+    "expired": "Истёк срок",
+    "unavailable": "Недоступно",
+    "dedicated_hint": "Специальные кредиты только для соответствующих моделей",
+    "plan": "Кредиты плана",
+    "addon": "Бонусные кредиты",
+    "dedicated": "Специальные кредиты",
+    "shared": "Общий ресурс"
+  },
   "common": {
     "login": "Войти",
     "logout": "Выйти",

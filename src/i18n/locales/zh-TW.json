@@ -1,4 +1,25 @@
 {
+  "qoder_quota": {
+    "idle": "點擊查詢額度",
+    "loading": "正在查詢額度",
+    "load_failed": "額度查詢失敗：{{message}}",
+    "empty_title": "暫無 Qoder 憑證",
+    "empty_desc": "新增 Qoder 憑證後顯示額度",
+    "empty_data": "暫無額度資料",
+    "invalid_data": "額度資料格式無效",
+    "missing_index": "缺少憑證索引",
+    "remaining": "剩餘 {{amount}} Credits",
+    "used_total": "已用 {{used}} / {{total}}",
+    "used_unknown": "已用 {{used}} · 總額度未提供",
+    "expires": "到期：{{date}}",
+    "expired": "已過期",
+    "unavailable": "無法使用",
+    "dedicated_hint": "專屬額度，僅適用於指定模型",
+    "plan": "方案內 Credits",
+    "addon": "贈送 Credits",
+    "dedicated": "專屬 Credits",
+    "shared": "共享資源包"
+  },
   "common": {
     "login": "登入",
     "logout": "登出",

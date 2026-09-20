@@ -1,4 +1,25 @@
 {
+  "qoder_quota": {
+    "idle": "Load credits",
+    "loading": "Loading credits",
+    "load_failed": "Could not load credits: {{message}}",
+    "empty_title": "No Qoder credentials",
+    "empty_desc": "Add a Qoder credential to view credits",
+    "empty_data": "No credits data",
+    "invalid_data": "Invalid credits data",
+    "missing_index": "Missing credential index",
+    "remaining": "{{amount}} Credits remaining",
+    "used_total": "Used {{used}} / {{total}}",
+    "used_unknown": "Used {{used}} · Capacity not provided",
+    "expires": "Expires: {{date}}",
+    "expired": "Expired",
+    "unavailable": "Unavailable",
+    "dedicated_hint": "Dedicated credits apply only to eligible models",
+    "plan": "Plan Credits",
+    "addon": "Bonus Credits",
+    "dedicated": "Dedicated Credits",
+    "shared": "Shared resource pool"
+  },
   "common": {
     "login": "Login",
     "logout": "Logout",

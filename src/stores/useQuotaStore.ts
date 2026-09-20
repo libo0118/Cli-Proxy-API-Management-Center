@@ -3,6 +3,7 @@
  */
 
 import { create } from 'zustand';
+import type { QoderQuotaState } from '@/services/api/qoderQuota';
 import { getQuotaCacheFileName } from '@/utils/quota/identity';
 import type {
   AntigravityQuotaState,
@@ -17,6 +18,8 @@ import type {
 type QuotaUpdater<T> = T | ((prev: T) => T);
 
 interface QuotaStoreState {
+  qoderQuota: Record<string, QoderQuotaState>;
+  setQoderQuota: (updater: QuotaUpdater<Record<string, QoderQuotaState>>) => void;
   cacheGeneration: number;
   fileGenerations: Record<string, number>;
   antigravityQuota: Record<string, AntigravityQuotaState>;
@@ -44,6 +47,9 @@ const resolveUpdater = <T>(updater: QuotaUpdater<T>, prev: T): T => {
 };
 
 export const useQuotaStore = create<QuotaStoreState>((set) => ({
+  qoderQuota: {},
+  setQoderQuota: (updater) =>
+    set((state) => ({ qoderQuota: resolveUpdater(updater, state.qoderQuota) })),
   cacheGeneration: 0,
   fileGenerations: {},
   antigravityQuota: {},
@@ -99,6 +105,7 @@ export const useQuotaStore = create<QuotaStoreState>((set) => ({
         };
         return {
           fileGenerations,
+          qoderQuota: omitNames(state.qoderQuota),
           antigravityQuota: omitNames(state.antigravityQuota),
           claudeQuota: omitNames(state.claudeQuota),
           codexQuota: omitNames(state.codexQuota),
@@ -110,6 +117,7 @@ export const useQuotaStore = create<QuotaStoreState>((set) => ({
       }
       return {
         cacheGeneration: state.cacheGeneration + 1,
+        qoderQuota: {},
         fileGenerations: {},
         antigravityQuota: {},
         claudeQuota: {},
