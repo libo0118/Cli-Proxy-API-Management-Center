@@ -18,7 +18,7 @@ export function useDevinQuotaAutoLoad(
   useEffect(() => {
     if (disabled) return;
     const targets = entries.filter(({ type, file }) => {
-      if (type !== 'devin' && type !== 'qoder') return false;
+      if (type !== 'devin' && type !== 'qoder' && type !== 'workbuddy') return false;
       const key = JSON.stringify([
         session,
         fileGenerations[file.name] ?? 0,
@@ -29,9 +29,11 @@ export function useDevinQuotaAutoLoad(
       attempted.current.add(key);
       // An explicit refresh already started in this effect cycle counts too.
       const cache =
-        type === 'qoder'
-          ? useQuotaStore.getState().qoderQuota
-          : useQuotaStore.getState().devinQuota;
+        type === 'workbuddy'
+          ? useQuotaStore.getState().workbuddyQuota
+          : type === 'qoder'
+            ? useQuotaStore.getState().qoderQuota
+            : useQuotaStore.getState().devinQuota;
       return cache[getQuotaCacheKey(file)]?.status !== 'loading';
     });
     if (targets.length > 0) void loadQuota(targets);

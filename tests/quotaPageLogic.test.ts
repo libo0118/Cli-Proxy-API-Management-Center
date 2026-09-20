@@ -72,6 +72,7 @@ describe('buildTabCounts', () => {
       devin: 0,
       meta: 0,
       qoder: 0,
+      workbuddy: 0,
     });
   });
 });

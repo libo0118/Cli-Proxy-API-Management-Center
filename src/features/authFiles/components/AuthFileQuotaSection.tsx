@@ -52,6 +52,8 @@ export function AuthFileQuotaSection(props: AuthFileQuotaSectionProps) {
     if (quotaType === 'meta') return state.metaQuota[cacheKey] as QuotaCardState | undefined;
     if (quotaType === 'xai') return state.xaiQuota[cacheKey] as QuotaCardState | undefined;
     if (quotaType === 'qoder') return state.qoderQuota[cacheKey] as QuotaCardState | undefined;
+    if (quotaType === 'workbuddy')
+      return state.workbuddyQuota[cacheKey] as QuotaCardState | undefined;
     return assertNever(quotaType);
   });
   const quota = storedQuota;
@@ -159,7 +161,8 @@ export function AuthFileQuotaSection(props: AuthFileQuotaSectionProps) {
 
   const quotaStatus = quota?.status ?? 'idle';
   const canRefreshQuota = !disableControls && !file.disabled && !resettingQuota;
-  const showRefreshQuota = quotaType === 'devin' || quotaType === 'qoder';
+  const showRefreshQuota =
+    quotaType === 'devin' || quotaType === 'qoder' || quotaType === 'workbuddy';
   const canUseResetQuota = canRefreshQuota && quotaStatus !== 'loading';
   const showResetQuotaAction = quota !== undefined && Boolean(adapter.canResetQuota?.(quota));
   const resetQuotaAction =

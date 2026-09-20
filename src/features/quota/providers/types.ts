@@ -7,6 +7,7 @@
 
 import type { TFunction } from 'i18next';
 import type { QoderQuotaState } from '@/services/api/qoderQuota';
+import type { WorkBuddyQuotaState } from '@/services/api/workbuddyQuota';
 import type {
   AntigravityQuotaState,
   AuthFileItem,
@@ -21,10 +22,12 @@ import type {
 export type QuotaUpdater<T> = T | ((prev: T) => T);
 
 export type QuotaProviderType =
-  'antigravity' | 'claude' | 'codex' | 'devin' | 'kimi' | 'xai' | 'meta' | 'qoder';
+  'antigravity' | 'claude' | 'codex' | 'devin' | 'kimi' | 'xai' | 'meta' | 'qoder' | 'workbuddy';
 
 /** useQuotaStore 的结构契约（storeSelector/storeSetter 依赖）。 */
 export interface QuotaStore {
+  workbuddyQuota: Record<string, WorkBuddyQuotaState>;
+  setWorkBuddyQuota: (updater: QuotaUpdater<Record<string, WorkBuddyQuotaState>>) => void;
   qoderQuota: Record<string, QoderQuotaState>;
   setQoderQuota: (updater: QuotaUpdater<Record<string, QoderQuotaState>>) => void;
   antigravityQuota: Record<string, AntigravityQuotaState>;

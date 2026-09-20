@@ -1,4 +1,16 @@
 {
+  "workbuddy_quota": {
+    "idle": "Загрузить кредиты",
+    "loading": "Загрузка кредитов",
+    "load_failed": "Ошибка загрузки: {{message}}",
+    "empty_title": "Нет учётных данных WorkBuddy",
+    "empty_desc": "Добавьте WorkBuddy для просмотра кредитов",
+    "empty_data": "Нет данных о кредитах",
+    "invalid_data": "Некорректные данные",
+    "missing_index": "Нет индекса аккаунта",
+    "total": "Всего кредитов",
+    "packages": "Пакеты ресурсов ({{count}})"
+  },
   "qoder_quota": {
     "idle": "Загрузить кредиты",
     "loading": "Загрузка кредитов",

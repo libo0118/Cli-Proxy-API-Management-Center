@@ -1,4 +1,16 @@
 {
+  "workbuddy_quota": {
+    "idle": "點擊查詢額度",
+    "loading": "正在查詢額度",
+    "load_failed": "額度查詢失敗：{{message}}",
+    "empty_title": "暫無 WorkBuddy 憑證",
+    "empty_desc": "新增 WorkBuddy 憑證後顯示額度",
+    "empty_data": "暫無額度資料",
+    "invalid_data": "額度資料格式無效",
+    "missing_index": "缺少帳號索引",
+    "total": "總額度",
+    "packages": "資源包明細（{{count}}）"
+  },
   "qoder_quota": {
     "idle": "點擊查詢額度",
     "loading": "正在查詢額度",

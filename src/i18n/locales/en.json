@@ -1,4 +1,16 @@
 {
+  "workbuddy_quota": {
+    "idle": "Load credits",
+    "loading": "Loading credits",
+    "load_failed": "Could not load credits: {{message}}",
+    "empty_title": "No WorkBuddy credentials",
+    "empty_desc": "Add a WorkBuddy credential to view credits",
+    "empty_data": "No credits data",
+    "invalid_data": "Invalid credits data",
+    "missing_index": "Missing account index",
+    "total": "Total Credits",
+    "packages": "Resource packages ({{count}})"
+  },
   "qoder_quota": {
     "idle": "Load credits",
     "loading": "Loading credits",
