@@ -659,6 +659,11 @@ export function MainLayout() {
       labelKey: 'nav_groups.control',
       items: [
         {
+          path: '/key-policies',
+          labelKey: 'key_policies.title',
+          icon: sidebarIcons.quota,
+        },
+        {
           path: '/config',
           labelKey: 'nav.config_management',
           metaKey: 'nav_meta.config_management',
