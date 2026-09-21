@@ -1,5 +1,8 @@
 {
   "key_policies": {
+    "no_resources": "No resources to configure",
+    "resource_details": "Resource ID and models",
+    "no_usage": "No resource usage yet",
     "title": "Key permissions & budgets",
     "reload": "Reload",
     "intro": "New keys deny all resources by default. Create and delete keys in the native API key settings.",

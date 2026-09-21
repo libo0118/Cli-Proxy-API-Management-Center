@@ -11,6 +11,8 @@ import iconGrokDark from '@/assets/icons/grok-dark.svg';
 import iconIflow from '@/assets/icons/iflow.svg';
 import iconKimiDark from '@/assets/icons/kimi-dark.svg';
 import iconKimiLight from '@/assets/icons/kimi-light.svg';
+// Official site favicon: https://opencode.ai/favicon-96x96-v3.png
+import iconOpenCode from '@/assets/icons/opencode.png';
 // Official site favicon: https://qoder.com/favIcon.svg
 import iconQoder from '@/assets/icons/qoder.svg';
 import iconQwen from '@/assets/icons/qwen.svg';
@@ -93,6 +95,7 @@ export const AUTH_FILE_ICONS: Record<string, AuthFileIconAsset> = {
   xai: { light: iconGrok, dark: iconGrokDark },
   iflow: iconIflow,
   kimi: { light: iconKimiDark, dark: iconKimiLight },
+  'opencode-go': iconOpenCode,
   qoder: iconQoder,
   qwen: iconQwen,
   vertex: iconVertex,

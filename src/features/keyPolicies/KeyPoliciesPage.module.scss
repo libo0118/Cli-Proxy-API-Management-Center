@@ -3,64 +3,231 @@
   flex-direction: column;
   gap: 20px;
   min-width: 0;
+  width: 100%;
+  :global(.card) {
+    min-width: 0;
+  }
+  :global(.card-header) {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  :global(.card-header .title) {
+    overflow-wrap: anywhere;
+  }
 }
 .header,
-.actions {
+.actions,
+.sectionHeading,
+.actionButtons {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
 }
-.header h1 {
-  margin: 0;
-  font-size: 28px;
+.header {
+  align-items: flex-start;
+  > div {
+    flex: 1;
+    min-width: 220px;
+  }
+  h1 {
+    margin: 0 0 8px;
+    font-size: clamp(26px, 3.2vw, 30px);
+    line-height: 1.15;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
 }
 .note {
   color: var(--text-secondary);
+  font-size: 13px;
   line-height: 1.6;
-  margin: 8px 0;
+  margin: 0;
+}
+.guidance {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  display: grid;
+  gap: 4px;
+}
+.fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.settings {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+  gap: 24px;
+  align-items: start;
+  :global(.form-group) {
+    margin-bottom: 0;
+  }
+}
+.scopeSetting {
+  min-width: 0;
+}
+.scope {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: var(--bg-tertiary);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.sectionHeading {
+  margin: 24px 0 12px;
+  h2 {
+    font-size: 15px;
+    margin: 0;
+  }
+}
+.resources {
+  border-top: 1px solid var(--border-color);
 }
 .rule {
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 16px;
+  padding: 16px 12px;
   display: grid;
-  gap: 12px;
-  margin-top: 12px;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.85fr);
+  gap: 16px 24px;
+  border-bottom: 1px solid var(--border-color);
+}
+.ruleSelected {
+  background: var(--bg-secondary);
+}
+.resourceInfo {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .fields {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 16px;
   align-items: start;
+  :global(.form-group) {
+    margin-bottom: 0;
+  }
+}
+.period {
+  display: grid;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
 }
 .check {
   display: flex;
   gap: 8px;
   align-items: center;
-  padding: 8px 0;
+  padding: 4px 0;
+  font-size: 14px;
+  line-height: 1.5;
+  cursor: pointer;
+  input {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    accent-color: var(--primary-color);
+  }
+  input:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 3px;
+  }
 }
 .meta {
   display: block;
   color: var(--text-secondary);
   font-size: 12px;
+  line-height: 1.6;
   overflow-wrap: anywhere;
   margin-top: 4px;
+}
+.details {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  summary {
+    cursor: pointer;
+    width: fit-content;
+  }
+  summary:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 3px;
+  }
+  &[open] {
+    max-height: 200px;
+    overflow-y: auto;
+  }
 }
 .editor {
   scroll-margin-top: 80px;
 }
+.actions {
+  padding-top: 20px;
+  .note {
+    flex: 1;
+    min-width: 200px;
+  }
+}
+.actionButtons {
+  justify-content: flex-end;
+}
+.keysTable {
+  width: 100%;
+  table-layout: fixed;
+  th:last-child {
+    width: 110px;
+  }
+  code {
+    overflow-wrap: anywhere;
+  }
+}
 .usageTable {
-  min-width: 1050px;
-
+  min-width: 920px;
   th,
   td {
     white-space: nowrap;
   }
+  td:nth-child(2) {
+    white-space: normal;
+    min-width: 140px;
+    max-width: 260px;
+    overflow-wrap: anywhere;
+  }
+}
+@media (max-width: 900px) {
+  .rule {
+    grid-template-columns: 1fr;
+  }
 }
 @media (max-width: 640px) {
+  .page {
+    gap: 16px;
+  }
+  .settings,
   .fields {
     grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .rule {
+    padding: 14px 10px;
+  }
+  .actionButtons {
+    width: 100%;
+    > button {
+      flex: 1;
+    }
+  }
+  .keysTable {
+    font-size: 12px;
+    th:last-child {
+      width: 92px;
+    }
+    th,
+    td {
+      padding: 10px 6px;
+    }
   }
 }

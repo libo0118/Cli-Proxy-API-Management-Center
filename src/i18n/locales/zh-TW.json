@@ -1,5 +1,8 @@
 {
   "key_policies": {
+    "no_resources": "暫無可設定資源",
+    "resource_details": "資源 ID 與模型",
+    "no_usage": "暫無資源用量",
     "title": "Key 權限與額度",
     "reload": "重新載入",
     "intro": "新建 Key 預設禁止存取所有資源。請在原生 API Key 設定中建立或刪除 Key。",
