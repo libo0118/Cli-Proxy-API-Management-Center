@@ -72,6 +72,8 @@ test('Qoder balances retain exhausted, dedicated and unknown shared capacity ind
   expect(markup).toContain('width:0%');
   expect(markup.match(/class="quotaBar"/g)).toHaveLength(2);
   expect(markup).toContain(i18n.t('qoder_quota.expired'));
+  expect(markup).toContain('title="2020-01-01T00:00:00Z"');
+  expect(markup).toContain('class="quotaResetRelative"');
   expect(markup).not.toContain(i18n.t('qoder_quota.loading'));
   expect(() => parseQoderQuota({ accounts: [] }, 'test')).toThrow();
   useQuotaStore.getState().setQoderQuota({ [file.name]: quota });

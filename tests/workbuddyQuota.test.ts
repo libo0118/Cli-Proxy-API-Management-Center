@@ -1,4 +1,9 @@
 import { expect, test } from 'bun:test';
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import i18n from '@/i18n';
+import { WorkBuddyQuotaBody } from '@/features/quota/providers/workbuddy/WorkBuddyQuotaBody';
+import { QUOTA_CLASS_KEYS, bindQuotaClasses } from '@/features/quota/types';
 import { parseWorkBuddyQuota } from '@/services/api/workbuddyQuota';
 import { classifyQuotaFiles, buildTabCounts } from '@/features/quota/logic';
 import {
@@ -30,6 +35,19 @@ test('WorkBuddy preserves packages, explicit zero, timezone and isolated cache',
   expect(data.pools).toHaveLength(2);
   expect(data.pools[1].remaining).toBe(0);
   expect(data.pools[0].expiresAt).toBe('2099-09-30T23:59:59+08:00');
+  const classes = bindQuotaClasses(
+    Object.fromEntries(QUOTA_CLASS_KEYS.map((key) => [key, key])),
+    'test'
+  );
+  const markup = renderToStaticMarkup(
+    createElement(WorkBuddyQuotaBody, { quota: { status: 'success', data }, classes })
+  );
+  expect(markup).toContain('<details');
+  expect(markup).toContain(i18n.t('workbuddy_quota.packages', { count: 2 }));
+  expect(markup.match(/>Pack</g)).toHaveLength(2);
+  expect(markup).toContain('2099-09-30T23:59:59+08:00');
+  expect(markup).toContain(i18n.t('qoder_quota.expired'));
+  expect(markup.match(/class="quotaBar"/g)).toHaveLength(3);
   expect(() => parseWorkBuddyQuota({ accounts: [] }, 'test')).toThrow();
   expect(() =>
     parseWorkBuddyQuota(

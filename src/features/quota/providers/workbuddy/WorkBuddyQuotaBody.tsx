@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import type { WorkBuddyQuotaState } from '@/services/api/workbuddyQuota';
 import type { QuotaBodyProps } from '../../types';
+import styles from '../../components/QuotaBody.module.scss';
 import { QoderQuotaBody } from '../qoder/QoderQuotaBody';
 
 export function WorkBuddyQuotaBody({ quota, classes }: QuotaBodyProps<WorkBuddyQuotaState>) {
@@ -18,9 +19,13 @@ export function WorkBuddyQuotaBody({ quota, classes }: QuotaBodyProps<WorkBuddyQ
         }}
       />
       {pools.length > 0 && (
-        <details>
-          <summary>{t('workbuddy_quota.packages', { count: pools.length })}</summary>
-          <QoderQuotaBody classes={classes} quota={{ ...quota, data: { plan: '', pools } }} />
+        <details className={styles.creditPackages}>
+          <summary className={classes.quotaModel}>
+            {t('workbuddy_quota.packages', { count: pools.length })}
+          </summary>
+          <div className={classes.quotaRow}>
+            <QoderQuotaBody classes={classes} quota={{ ...quota, data: { plan: '', pools } }} />
+          </div>
         </details>
       )}
     </>
