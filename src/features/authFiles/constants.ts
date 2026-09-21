@@ -11,8 +11,12 @@ import iconGrokDark from '@/assets/icons/grok-dark.svg';
 import iconIflow from '@/assets/icons/iflow.svg';
 import iconKimiDark from '@/assets/icons/kimi-dark.svg';
 import iconKimiLight from '@/assets/icons/kimi-light.svg';
+// Official site favicon: https://qoder.com/favIcon.svg
+import iconQoder from '@/assets/icons/qoder.svg';
 import iconQwen from '@/assets/icons/qwen.svg';
 import iconVertex from '@/assets/icons/vertex.svg';
+// Official favicon bundled from https://www.workbuddy.ai/
+import iconWorkBuddy from '@/assets/icons/workbuddy.svg';
 import type { AuthFileItem, ResolvedTheme, ThemeColors } from '@/types';
 import { normalizeOAuthProviderKey } from '@/utils/providerKeys';
 import { parseTimestamp } from '@/utils/timestamp';
@@ -89,8 +93,10 @@ export const AUTH_FILE_ICONS: Record<string, AuthFileIconAsset> = {
   xai: { light: iconGrok, dark: iconGrokDark },
   iflow: iconIflow,
   kimi: { light: iconKimiDark, dark: iconKimiLight },
+  qoder: iconQoder,
   qwen: iconQwen,
   vertex: iconVertex,
+  workbuddy: iconWorkBuddy,
 };
 
 export const clampCardPageSize = (value: number) =>
