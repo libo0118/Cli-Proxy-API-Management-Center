@@ -17,6 +17,7 @@ export interface KeyPolicy {
 export interface PolicyResource {
   resourceId: string;
   label: string;
+  fileName: string;
   provider: string;
   kind: string;
   disabled: boolean;
@@ -57,6 +58,7 @@ interface WireReport {
     | {
         resource_id: string;
         label: string;
+        file_name?: string;
         provider: string;
         kind: string;
         disabled: boolean;
@@ -124,6 +126,7 @@ export function normalizePolicyReport(data: WireReport): PolicyReport {
     resources: (data.resources ?? []).map((r) => ({
       resourceId: r.resource_id,
       label: r.label,
+      fileName: r.file_name ?? '',
       provider: r.provider,
       kind: r.kind,
       disabled: r.disabled,

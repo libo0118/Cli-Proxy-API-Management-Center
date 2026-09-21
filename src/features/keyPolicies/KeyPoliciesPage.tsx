@@ -223,6 +223,7 @@ export function KeyPoliciesPage() {
                         kind: '',
                         disabled: true,
                         models: [],
+                        fileName: '',
                       })),
                   ].map((resource) => {
                     const rule = draft.rules.find((r) => r.resourceId === resource.resourceId);
@@ -250,6 +251,9 @@ export function KeyPoliciesPage() {
                           />
                           <strong>{resource.label || resource.resourceId}</strong>
                         </label>
+                        {resource.fileName && (
+                          <code className={styles.meta}>{resource.fileName}</code>
+                        )}
                         <span className={styles.meta}>
                           {resource.kind
                             ? t('key_policies.kind_' + resource.kind)
@@ -354,7 +358,12 @@ export function KeyPoliciesPage() {
                       <TableCell>
                         {report.keys.find((k) => k.keyId === b.keyId)?.keyPreview || '—'}
                       </TableCell>
-                      <TableCell>{resourceName(b.resourceId)}</TableCell>
+                      <TableCell>
+                        {resourceName(b.resourceId)}
+                        <span className={styles.meta}>
+                          {report.resources.find((r) => r.resourceId === b.resourceId)?.fileName}
+                        </span>
+                      </TableCell>
                       <TableCell>{t('key_policies.period_' + b.period)}</TableCell>
                       <TableCell>{b.usedUsd}</TableCell>
                       <TableCell>{b.reservedUsd}</TableCell>

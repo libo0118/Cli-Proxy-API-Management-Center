@@ -9,6 +9,27 @@ import {
 import { Card } from '../src/components/ui/Card';
 
 describe('key policy contract', () => {
+  test('preserves the comparable auth filename alongside stable resource identity', () => {
+    const report = normalizePolicyReport({
+      revision: 1,
+      keys: [],
+      budgets: [],
+      prices_updated_at: '',
+      resources: [
+        {
+          resource_id: 'stable-id',
+          label: 'Account [INTL]',
+          file_name: 'qoder-intl-account.json',
+          provider: 'qoder',
+          kind: 'oauth',
+          disabled: false,
+          models: [],
+        },
+      ],
+    });
+    expect(report.resources[0].resourceId).toBe('stable-id');
+    expect(report.resources[0].fileName).toBe('qoder-intl-account.json');
+  });
   test('exact decimal amounts include zero and reject unsafe formats', () => {
     for (const value of ['0', '0.000001', '12.340000', '9223372036854.775807'])
       expect(validPolicyAmount(value)).toBe(true);
