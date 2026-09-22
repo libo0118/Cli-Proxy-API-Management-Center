@@ -61,6 +61,21 @@
     "total": "總額度",
     "packages": "資源包明細（{{count}}）"
   },
+  "cursor_quota": {
+    "idle": "點擊此處重新整理額度",
+    "loading": "正在載入額度",
+    "load_failed": "額度載入失敗：{{message}}",
+    "load_error": "Cursor 額度請求失敗",
+    "missing_index": "缺少認證索引",
+    "invalid_data": "Cursor 額度資料格式無效",
+    "empty_data": "暫無 Cursor 額度資料",
+    "remaining": "剩餘 {{amount}}",
+    "used_total": "已用 {{used}} / {{total}}",
+    "plan": "方案額度",
+    "on_demand_individual": "個人按量額度",
+    "on_demand_team": "團隊按量額度",
+    "credit_grants": "贈送額度"
+  },
   "qoder_quota": {
     "idle": "點擊查詢額度",
     "loading": "正在查詢額度",
@@ -406,6 +421,8 @@
     "filter_aistudio": "AIStudio",
     "filter_claude": "Claude",
     "filter_codex": "Codex",
+    "filter_cursor": "Cursor",
+    "plugin_quota_unavailable": "外掛未提供官方額度",
     "filter_meta": "Muse (Meta)",
     "filter_devin": "Devin",
     "filter_antigravity": "Antigravity",

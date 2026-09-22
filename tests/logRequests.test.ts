@@ -148,7 +148,10 @@ describe('log request ownership', () => {
 });
 
 describe('logs page lifecycle wiring', () => {
-  const source = readFileSync(new URL('../src/pages/LogsPage.tsx', import.meta.url), 'utf8');
+  const source = readFileSync(new URL('../src/pages/LogsPage.tsx', import.meta.url), 'utf8').replace(
+    /\r\n/g,
+    '\n'
+  );
 
   test('invalidates synchronously on connection identity/config changes and unmount', () => {
     expect(source).toContain('useAuthStore.subscribe');

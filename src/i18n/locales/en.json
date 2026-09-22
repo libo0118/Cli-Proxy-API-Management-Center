@@ -61,6 +61,21 @@
     "total": "Total Credits",
     "packages": "Resource packages ({{count}})"
   },
+  "cursor_quota": {
+    "idle": "Load quota",
+    "loading": "Loading quota",
+    "load_failed": "Failed to load quota: {{message}}",
+    "load_error": "Cursor quota request failed",
+    "missing_index": "Missing credential index",
+    "invalid_data": "Invalid Cursor quota response",
+    "empty_data": "Cursor quota data is unavailable",
+    "remaining": "Remaining {{amount}}",
+    "used_total": "Used {{used}} / {{total}}",
+    "plan": "Plan allowance",
+    "on_demand_individual": "Individual on-demand",
+    "on_demand_team": "Team on-demand",
+    "credit_grants": "Credit grants"
+  },
   "qoder_quota": {
     "idle": "Load credits",
     "loading": "Loading credits",
@@ -408,6 +423,8 @@
     "filter_aistudio": "AIStudio",
     "filter_claude": "Claude",
     "filter_codex": "Codex",
+    "filter_cursor": "Cursor",
+    "plugin_quota_unavailable": "The plugin does not provide official quota data",
     "filter_meta": "Muse (Meta)",
     "filter_devin": "Devin",
     "filter_antigravity": "Antigravity",

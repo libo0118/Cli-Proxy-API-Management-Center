@@ -29,6 +29,8 @@ import { QODER_CONFIG } from './qoder/data';
 import { QoderQuotaBody } from './qoder/QoderQuotaBody';
 import { WORKBUDDY_CONFIG } from './workbuddy/data';
 import { WorkBuddyQuotaBody } from './workbuddy/WorkBuddyQuotaBody';
+import { CURSOR_CONFIG } from './cursor/data';
+import { CursorQuotaBody } from './cursor/CursorQuotaBody';
 
 /** 所有 provider 额度状态的公共骨架（各 *QuotaState 的结构子集）。 */
 export interface QuotaCardState {
@@ -53,6 +55,7 @@ export interface QuotaAdapter {
 }
 
 export const QUOTA_ADAPTERS: Record<QuotaProviderType, QuotaAdapter> = {
+  cursor: { ...CURSOR_CONFIG, Body: CursorQuotaBody } as unknown as QuotaAdapter,
   workbuddy: { ...WORKBUDDY_CONFIG, Body: WorkBuddyQuotaBody } as unknown as QuotaAdapter,
   qoder: { ...QODER_CONFIG, Body: QoderQuotaBody } as unknown as QuotaAdapter,
   antigravity: {

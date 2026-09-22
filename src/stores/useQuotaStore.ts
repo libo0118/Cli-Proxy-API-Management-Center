@@ -3,6 +3,7 @@
  */
 
 import { create } from 'zustand';
+import type { CursorQuotaState } from '@/services/api/cursorQuota';
 import type { QoderQuotaState } from '@/services/api/qoderQuota';
 import type { WorkBuddyQuotaState } from '@/services/api/workbuddyQuota';
 import { getQuotaCacheFileName } from '@/utils/quota/identity';
@@ -19,6 +20,8 @@ import type {
 type QuotaUpdater<T> = T | ((prev: T) => T);
 
 interface QuotaStoreState {
+  cursorQuota: Record<string, CursorQuotaState>;
+  setCursorQuota: (updater: QuotaUpdater<Record<string, CursorQuotaState>>) => void;
   workbuddyQuota: Record<string, WorkBuddyQuotaState>;
   setWorkBuddyQuota: (updater: QuotaUpdater<Record<string, WorkBuddyQuotaState>>) => void;
   qoderQuota: Record<string, QoderQuotaState>;
@@ -50,6 +53,9 @@ const resolveUpdater = <T>(updater: QuotaUpdater<T>, prev: T): T => {
 };
 
 export const useQuotaStore = create<QuotaStoreState>((set) => ({
+  cursorQuota: {},
+  setCursorQuota: (updater) =>
+    set((state) => ({ cursorQuota: resolveUpdater(updater, state.cursorQuota) })),
   workbuddyQuota: {},
   setWorkBuddyQuota: (updater) =>
     set((state) => ({ workbuddyQuota: resolveUpdater(updater, state.workbuddyQuota) })),
@@ -111,6 +117,7 @@ export const useQuotaStore = create<QuotaStoreState>((set) => ({
         };
         return {
           fileGenerations,
+          cursorQuota: omitNames(state.cursorQuota),
           qoderQuota: omitNames(state.qoderQuota),
           workbuddyQuota: omitNames(state.workbuddyQuota),
           antigravityQuota: omitNames(state.antigravityQuota),
@@ -124,6 +131,7 @@ export const useQuotaStore = create<QuotaStoreState>((set) => ({
       }
       return {
         cacheGeneration: state.cacheGeneration + 1,
+        cursorQuota: {},
         qoderQuota: {},
         workbuddyQuota: {},
         fileGenerations: {},

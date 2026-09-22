@@ -6,6 +6,7 @@
  */
 
 import type { TFunction } from 'i18next';
+import type { CursorQuotaState } from '@/services/api/cursorQuota';
 import type { QoderQuotaState } from '@/services/api/qoderQuota';
 import type { WorkBuddyQuotaState } from '@/services/api/workbuddyQuota';
 import type {
@@ -22,10 +23,12 @@ import type {
 export type QuotaUpdater<T> = T | ((prev: T) => T);
 
 export type QuotaProviderType =
-  'antigravity' | 'claude' | 'codex' | 'devin' | 'kimi' | 'xai' | 'meta' | 'qoder' | 'workbuddy';
+  'antigravity' | 'claude' | 'codex' | 'devin' | 'kimi' | 'xai' | 'meta' | 'qoder' | 'workbuddy' | 'cursor';
 
 /** useQuotaStore 的结构契约（storeSelector/storeSetter 依赖）。 */
 export interface QuotaStore {
+  cursorQuota: Record<string, CursorQuotaState>;
+  setCursorQuota: (updater: QuotaUpdater<Record<string, CursorQuotaState>>) => void;
   workbuddyQuota: Record<string, WorkBuddyQuotaState>;
   setWorkBuddyQuota: (updater: QuotaUpdater<Record<string, WorkBuddyQuotaState>>) => void;
   qoderQuota: Record<string, QoderQuotaState>;

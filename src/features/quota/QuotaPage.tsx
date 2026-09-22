@@ -130,6 +130,7 @@ export function QuotaPage() {
   const metaQuota = useQuotaStore((state) => state.metaQuota);
   const xaiQuota = useQuotaStore((state) => state.xaiQuota);
   const qoderQuota = useQuotaStore((state) => state.qoderQuota);
+  const cursorQuota = useQuotaStore((state) => state.cursorQuota);
   const workbuddyQuota = useQuotaStore((state) => state.workbuddyQuota);
 
   const quotaByType = useMemo<Record<QuotaProviderType, Record<string, QuotaCardState>>>(
@@ -143,6 +144,7 @@ export function QuotaPage() {
         meta: metaQuota,
         xai: xaiQuota,
         qoder: qoderQuota,
+        cursor: cursorQuota,
         workbuddy: workbuddyQuota,
       }) as unknown as Record<QuotaProviderType, Record<string, QuotaCardState>>,
     [
@@ -154,6 +156,7 @@ export function QuotaPage() {
       metaQuota,
       xaiQuota,
       qoderQuota,
+      cursorQuota,
       workbuddyQuota,
     ]
   );

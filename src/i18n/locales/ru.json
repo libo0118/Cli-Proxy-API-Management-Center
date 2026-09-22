@@ -61,6 +61,21 @@
     "total": "Всего кредитов",
     "packages": "Пакеты ресурсов ({{count}})"
   },
+  "cursor_quota": {
+    "idle": "Загрузить квоту",
+    "loading": "Загрузка квоты",
+    "load_failed": "Ошибка загрузки квоты: {{message}}",
+    "load_error": "Ошибка запроса квоты Cursor",
+    "missing_index": "Нет индекса учетных данных",
+    "invalid_data": "Неверный ответ квоты Cursor",
+    "empty_data": "Данные квоты Cursor недоступны",
+    "remaining": "Осталось {{amount}}",
+    "used_total": "Использовано {{used}} / {{total}}",
+    "plan": "Квота плана",
+    "on_demand_individual": "Индивидуальная оплата",
+    "on_demand_team": "Командная оплата",
+    "credit_grants": "Бонусные кредиты"
+  },
   "qoder_quota": {
     "idle": "Загрузить кредиты",
     "loading": "Загрузка кредитов",
@@ -411,6 +426,8 @@
     "filter_aistudio": "AIStudio",
     "filter_claude": "Claude",
     "filter_codex": "Codex",
+    "filter_cursor": "Cursor",
+    "plugin_quota_unavailable": "Плагин не предоставляет официальные данные о квоте",
     "filter_meta": "Muse (Meta)",
     "filter_devin": "Devin",
     "filter_antigravity": "Antigravity",

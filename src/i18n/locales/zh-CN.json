@@ -61,6 +61,21 @@
     "total": "总额度",
     "packages": "资源包明细（{{count}}）"
   },
+  "cursor_quota": {
+    "idle": "点击此处刷新额度",
+    "loading": "正在加载额度",
+    "load_failed": "额度加载失败：{{message}}",
+    "load_error": "Cursor 额度请求失败",
+    "missing_index": "缺少认证索引",
+    "invalid_data": "Cursor 额度数据格式无效",
+    "empty_data": "暂无 Cursor 额度数据",
+    "remaining": "剩余 {{amount}}",
+    "used_total": "已用 {{used}} / {{total}}",
+    "plan": "套餐额度",
+    "on_demand_individual": "个人按量额度",
+    "on_demand_team": "团队按量额度",
+    "credit_grants": "赠送额度"
+  },
   "qoder_quota": {
     "idle": "点击查询额度",
     "loading": "正在查询额度",
@@ -406,6 +421,8 @@
     "filter_aistudio": "AIStudio",
     "filter_claude": "Claude",
     "filter_codex": "Codex",
+    "filter_cursor": "Cursor",
+    "plugin_quota_unavailable": "插件未提供官方额度",
     "filter_meta": "Muse (Meta)",
     "filter_devin": "Devin",
     "filter_antigravity": "Antigravity",

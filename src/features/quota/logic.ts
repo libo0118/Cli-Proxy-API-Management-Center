@@ -4,6 +4,7 @@
  */
 
 import type { AuthFileItem } from '@/types';
+import { CURSOR_CONFIG } from './providers/cursor/data';
 import { ANTIGRAVITY_CONFIG } from './providers/antigravity/data';
 import { CLAUDE_CONFIG } from './providers/claude/data';
 import { CODEX_CONFIG } from './providers/codex/data';
@@ -17,6 +18,7 @@ import type { QuotaProviderType } from './providers/types';
 import { QUOTA_TAB_ORDER, type QuotaSortMode, type QuotaTabId } from './constants';
 
 const QUOTA_FILTER_MAP: Record<QuotaProviderType, (file: AuthFileItem) => boolean> = {
+  cursor: CURSOR_CONFIG.filterFn,
   workbuddy: WORKBUDDY_CONFIG.filterFn,
   qoder: QODER_CONFIG.filterFn,
   antigravity: ANTIGRAVITY_CONFIG.filterFn,
