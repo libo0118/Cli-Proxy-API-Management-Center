@@ -600,6 +600,8 @@
     "reset_confirm_message": "This will consume 1 manual reset to reset the Codex quota for \"{{name}}\". Continue?",
     "reset_confirm_button": "Reset quota",
     "reset_success": "Reset Codex quota for \"{{name}}\"",
+    "reset_invalid_response": "The reset endpoint returned an unknown result. Refresh to verify before consuming another reset credit.",
+    "reset_applied_refresh_failed": "The upstream quota was reset, but cooldown recovery or status refresh failed: {{message}}. Refresh or disable and re-enable the credential; do not reset the quota again.",
     "reset_failed": "Failed to reset Codex quota for \"{{name}}\": {{message}}",
     "plan_plus": "Plus",
     "plan_team": "Team",

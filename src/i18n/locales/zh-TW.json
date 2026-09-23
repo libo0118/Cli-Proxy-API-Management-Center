@@ -598,6 +598,8 @@
     "reset_confirm_message": "將消耗 1 次主動重置次數來重置「{{name}}」的 Codex 配額。是否繼續？",
     "reset_confirm_button": "確認重置",
     "reset_success": "已重置「{{name}}」的 Codex 配額",
+    "reset_invalid_response": "重置介面傳回未知結果，請先重新整理確認，勿重複消耗重置次數。",
+    "reset_applied_refresh_failed": "官方配額已重置，但清除冷卻或重新整理狀態失敗：{{message}}。請先重新整理或停用後重新啟用憑證，勿再次重置配額。",
     "reset_failed": "重置「{{name}}」的 Codex 配額失敗：{{message}}",
     "plan_plus": "Plus",
     "plan_team": "Team",

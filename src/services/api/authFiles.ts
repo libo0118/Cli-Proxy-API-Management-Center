@@ -433,6 +433,8 @@ export const serializeOauthModelAliases = (
 const OAUTH_MODEL_ALIAS_ENDPOINT = '/oauth-model-alias';
 
 export const authFilesApi = {
+  clearCooldown: (authIndex: string) =>
+    apiClient.post('/reset-quota', { auth_index: authIndex }),
   list: async (lookup?: AuthFileLookup) =>
     normalizeAuthFilesResponse(
       await apiClient.get<AuthFilesResponse>(

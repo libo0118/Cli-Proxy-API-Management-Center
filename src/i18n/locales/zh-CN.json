@@ -598,6 +598,8 @@
     "reset_confirm_message": "将消耗 1 次主动重置次数来重置 \"{{name}}\" 的 Codex 额度。是否继续？",
     "reset_confirm_button": "确认重置",
     "reset_success": "已重置 \"{{name}}\" 的 Codex 额度",
+    "reset_invalid_response": "重置接口返回未知结果，请先刷新核对，勿重复消耗重置次数。",
+    "reset_applied_refresh_failed": "官方额度已重置，但清除冷却或刷新状态失败：{{message}}。请先刷新或禁用后重新启用凭证，勿再次重置额度。",
     "reset_failed": "重置 \"{{name}}\" 的 Codex 额度失败：{{message}}",
     "plan_plus": "Plus",
     "plan_team": "Team",

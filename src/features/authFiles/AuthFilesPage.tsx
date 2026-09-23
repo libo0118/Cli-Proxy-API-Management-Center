@@ -32,6 +32,7 @@ import { ProviderTabs } from '@/features/authFiles/components/ProviderTabs';
 import { VaultHeader } from '@/features/authFiles/components/VaultHeader';
 import { VaultPulse } from '@/features/authFiles/components/VaultPulse';
 import { invalidateAuthFileDerivedCaches } from '@/features/authFiles/cacheInvalidation';
+import { AUTH_FILES_CHANGED_EVENT } from '@/features/authFiles/authFilesEvents';
 import {
   buildWildcardSearch,
   matchesAuthFileSearch,
@@ -361,6 +362,13 @@ export function AuthFilesPage() {
   }, [loadFiles, loadExcluded, loadModelAlias]);
 
   useHeaderRefresh(handleHeaderRefresh);
+
+  useEffect(() => {
+    if (!isCurrentLayer) return;
+    const refresh = () => { void loadFiles({ background: true }).catch(() => {}); };
+    window.addEventListener(AUTH_FILES_CHANGED_EVENT, refresh);
+    return () => window.removeEventListener(AUTH_FILES_CHANGED_EVENT, refresh);
+  }, [isCurrentLayer, loadFiles]);
 
   useEffect(() => {
     if (!isCurrentLayer) return;

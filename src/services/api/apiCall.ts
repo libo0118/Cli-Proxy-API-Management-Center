@@ -19,6 +19,7 @@ export interface ApiCallResult<T = unknown> {
   header: Record<string, string[]>;
   bodyText: string;
   body: T | null;
+  quotaRecovered?: boolean;
 }
 
 const normalizeBody = (input: unknown): { bodyText: string; body: unknown | null } => {
@@ -87,6 +88,7 @@ export const apiCallApi = {
       header,
       bodyText,
       body,
+      quotaRecovered: response?.quota_recovered === true,
     };
   },
 };

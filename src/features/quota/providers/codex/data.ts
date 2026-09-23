@@ -13,7 +13,10 @@ import type {
   CodexQuotaWindow,
   CodexUsagePayload,
 } from '@/types';
-import { apiCallApi, getApiCallErrorMessage } from '@/services/api';
+import { apiCallApi, authFilesApi, getApiCallErrorMessage } from '@/services/api';
+import { isRecord } from '@/utils/helpers';
+import { captureQuotaCacheGeneration, commitIfQuotaCacheCurrent } from '@/stores/useQuotaStore';
+import { notifyAuthFilesChanged } from '@/features/authFiles/authFilesEvents';
 import {
   CODEX_RATE_LIMIT_RESET_CREDITS_URL,
   CODEX_RATE_LIMIT_RESET_CREDITS_CONSUME_URL,
@@ -39,6 +42,10 @@ import { normalizeAuthIndex } from '@/utils/authIndex';
 import type { QuotaProviderData } from '../types';
 
 const CODEX_RESET_CREDITS_REQUEST_TIMEOUT_MS = 8000;
+
+export class CodexQuotaResetAppliedError extends Error {
+  override name = 'CodexQuotaResetAppliedError';
+}
 
 type CodexResetCreditsData = {
   availableCount: number | null;
@@ -351,6 +358,7 @@ const fetchCodexResetCredits = async (
 };
 
 const fetchCodexQuota = async (file: AuthFileItem, t: TFunction): Promise<CodexQuotaData> => {
+  const generation = captureQuotaCacheGeneration(file.name);
   const rawAuthIndex = file['auth_index'] ?? file.authIndex;
   const authIndex = normalizeAuthIndex(rawAuthIndex);
   if (!authIndex) {
@@ -375,6 +383,9 @@ const fetchCodexQuota = async (file: AuthFileItem, t: TFunction): Promise<CodexQ
   const payload = parseCodexUsagePayload(result.body ?? result.bodyText);
   if (!payload) {
     throw new Error(t('codex_quota.empty_windows'));
+  }
+  if (result.quotaRecovered) {
+    commitIfQuotaCacheCurrent(generation, notifyAuthFilesChanged);
   }
 
   const planTypeFromUsage = normalizePlanType(payload.plan_type ?? payload.planType);
@@ -441,11 +452,26 @@ const consumeCodexRateLimitResetCredit = async (
   if (result.statusCode < 200 || result.statusCode >= 300) {
     throw createStatusError(getApiCallErrorMessage(result), result.statusCode);
   }
+  if (!isRecord(result.body) || result.body.code !== 'reset' ||
+      !Number.isInteger(result.body.windows_reset ?? result.body.windowsReset)) {
+    throw new Error(t('codex_quota.reset_invalid_response'));
+  }
 };
 
 const resetCodexQuota = async (file: AuthFileItem, t: TFunction): Promise<CodexQuotaData> => {
+  const generation = captureQuotaCacheGeneration(file.name);
   await consumeCodexRateLimitResetCredit(file, t);
-  return fetchCodexQuota(file, t);
+  // A consumed credit must never be retried because routing recovery or refresh failed.
+  try {
+    if (!commitIfQuotaCacheCurrent(generation, () => {})) throw new Error('Connection changed');
+    const authIndex = normalizeAuthIndex(file['auth_index'] ?? file.authIndex)!;
+    await authFilesApi.clearCooldown(authIndex);
+    if (!commitIfQuotaCacheCurrent(generation, () => {})) throw new Error('Connection changed');
+    return await fetchCodexQuota(file, t);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : t('common.unknown_error');
+    throw new CodexQuotaResetAppliedError(t('codex_quota.reset_applied_refresh_failed', { message }));
+  }
 };
 
 export const CODEX_CONFIG: QuotaProviderData<CodexQuotaState, CodexQuotaData> = {

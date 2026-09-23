@@ -15,6 +15,8 @@ import type { AuthFileItem } from '@/types';
 import { getStatusFromError } from '@/utils/quota';
 import { getQuotaCacheKey } from '@/utils/quota/identity';
 import { getQuotaMap, getQuotaSetter, type QuotaAdapter, type QuotaCardState } from '../providers';
+import { CodexQuotaResetAppliedError } from '../providers/codex/data';
+import { notifyAuthFilesChanged } from '@/features/authFiles/authFilesEvents';
 
 const getQuotaState = (adapter: QuotaAdapter, file: AuthFileItem): QuotaCardState | undefined =>
   getQuotaMap(adapter)[getQuotaCacheKey(file)];
@@ -92,10 +94,16 @@ export function useQuotaActions(disableControls: boolean) {
                 [cacheKey]: adapter.buildSuccessState(data),
               }));
               showNotification(t('codex_quota.reset_success', { name: file.name }), 'success');
+              notifyAuthFilesChanged();
             });
           } catch (err: unknown) {
             const message = err instanceof Error ? err.message : t('common.unknown_error');
             commitIfQuotaCacheCurrent(cacheGeneration, () => {
+              if (err instanceof CodexQuotaResetAppliedError) {
+                showNotification(message, 'warning');
+                notifyAuthFilesChanged();
+                return;
+              }
               showNotification(
                 t('codex_quota.reset_failed', { name: file.name, message }),
                 'error'
