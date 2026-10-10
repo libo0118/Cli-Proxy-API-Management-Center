@@ -1,83 +1,95 @@
-import { afterEach, describe, expect, mock, spyOn, test } from 'bun:test';
+import { afterEach, describe, expect, spyOn, test } from 'bun:test';
 import type { TFunction } from 'i18next';
 import { CODEX_CONFIG } from '@/features/quota/providers/codex/data';
-import { apiClient } from '@/services/api/client';
-import { CODEX_RATE_LIMIT_RESET_CREDITS_CONSUME_URL, CODEX_USAGE_URL } from '@/utils/quota';
-import { useQuotaStore } from '@/stores/useQuotaStore';
+import { apiCallApi, authFilesApi, apiClient } from '@/services/api';
+import { CODEX_RATE_LIMIT_RESET_CREDITS_CONSUME_URL } from '@/utils/quota';
 
 const t = ((key: string) => key) as TFunction;
-const file = { name: 'codex-test.json', type: 'codex', auth_index: 'auth-test' };
-afterEach(() => mock.restore());
+const file = { name: 'codex-test.json', auth_index: 'test-index', type: 'codex' };
+const response = (body: unknown, statusCode = 200) => ({
+  statusCode,
+  body,
+  bodyText: JSON.stringify(body),
+  header: {},
+});
+const reset = () => CODEX_CONFIG.resetQuota!(file, t);
+const mocks: Array<{ mockRestore(): void }> = [];
+afterEach(() => {
+  for (const mock of mocks.splice(0)) mock.mockRestore();
+});
 
-describe('Codex quota reset recovery', () => {
-  test('refreshes credential status when a quota query recovers routing', async () => {
-    const original = Object.getOwnPropertyDescriptor(globalThis, 'window');
-    const target = new EventTarget();
-    Object.defineProperty(globalThis, 'window', { value: target, configurable: true });
-    let changes = 0;
-    target.addEventListener('auth-files-changed', () => changes++);
-    spyOn(apiClient, 'post').mockImplementation(async (_path, data) => ({
-      status_code: 200,
-      quota_recovered: (data as { url?: string }).url === CODEX_USAGE_URL,
-      body: JSON.stringify({ rate_limit: { allowed: true, primary_window: { used_percent: 0 } } }),
-    }));
-    try {
-      await CODEX_CONFIG.fetchQuota(file, t);
-      expect(changes).toBe(1);
-    } finally {
-      if (original) Object.defineProperty(globalThis, 'window', original);
-      else Reflect.deleteProperty(globalThis, 'window');
+function setup(body: unknown, statusCode = 200) {
+  if (body && typeof body === 'object' && 'code' in body && body.code === 'reset') {
+    body = { windows_reset: 1, ...body };
+  }
+  const calls: string[] = [];
+  const request = spyOn(apiCallApi, 'request').mockImplementation(async (payload) => {
+    if (payload.url === CODEX_RATE_LIMIT_RESET_CREDITS_CONSUME_URL) {
+      calls.push('consume');
+      return response(body, statusCode);
     }
+    calls.push('read');
+    return response({});
+  });
+  const clear = spyOn(authFilesApi, 'resetCooldown').mockImplementation(async () => {
+    calls.push('clear');
+    return { status: 'ok', auth_index: 'test-index', models: [] };
+  });
+  mocks.push(request, clear);
+  return { calls, request, clear };
+}
+
+describe('Codex reset gateway cooldown', () => {
+  test.each(['reset', 'already_redeemed'])(
+    'clears only after confirmed %s, before reads',
+    async (code) => {
+      const { calls, clear } = setup({ code, windows_reset: 0 });
+      await reset();
+      expect(calls.slice(0, 3)).toEqual(['consume', 'clear', 'read']);
+      expect(clear).toHaveBeenCalledTimes(1);
+      expect(clear).toHaveBeenCalledWith('test-index');
+    }
+  );
+
+  test.each(['no_credit', 'nothing_to_reset', 'unknown'])('does not clear for %s', async (code) => {
+    const { calls } = setup({ code });
+    await expect(reset()).rejects.toThrow('codex_quota.reset_not_confirmed');
+    expect(calls).toEqual(['consume']);
   });
 
-  test('clears CPA cooldown after consuming the credit, before refreshing quota', async () => {
-    const calls: string[] = [];
-    spyOn(apiClient, 'post').mockImplementation(async (path, data) => {
-      const request = data as { url?: string };
-      calls.push(request.url ?? path);
-      if (path === '/reset-quota') {
-        expect(data).toEqual({ auth_index: 'auth-test' });
-        return { status: 'ok' };
-      }
-      return { status_code: 200, body: JSON.stringify(request.url === CODEX_RATE_LIMIT_RESET_CREDITS_CONSUME_URL
-        ? { code: 'reset', windows_reset: 1 }
-        : request.url === CODEX_USAGE_URL
-          ? { plan_type: 'pro', rate_limit: { allowed: true, primary_window: { used_percent: 0, limit_window_seconds: 604800 } } }
-          : { available_count: 0, credits: [] }) };
-    });
-    await CODEX_CONFIG.resetQuota!(file, t);
-    expect(calls.slice(0, 3)).toEqual([CODEX_RATE_LIMIT_RESET_CREDITS_CONSUME_URL, '/reset-quota', CODEX_USAGE_URL]);
+  test('does not clear on HTTP failure', async () => {
+    const { calls } = setup({ code: 'reset' }, 503);
+    await expect(reset()).rejects.toThrow();
+    expect(calls).toEqual(['consume']);
   });
 
-  test('does not clear cooldown when the official reset is rejected', async () => {
-    const post = spyOn(apiClient, 'post').mockResolvedValue({ status_code: 429, body: '{"error":"exhausted"}' });
-    await expect(CODEX_CONFIG.resetQuota!(file, t)).rejects.toThrow();
-    expect(post).toHaveBeenCalledTimes(1);
+  test('does not clear on transport failure', async () => {
+    const { request, clear } = setup({});
+    request.mockRejectedValue(new Error('timeout'));
+    await expect(reset()).rejects.toThrow('timeout');
+    expect(clear).not.toHaveBeenCalled();
   });
 
-  test('does not clear cooldown for an unrecognized successful response', async () => {
-    const post = spyOn(apiClient, 'post').mockResolvedValue({ status_code: 200, body: '{"code":"unknown"}' });
-    await expect(CODEX_CONFIG.resetQuota!(file, t)).rejects.toThrow('codex_quota.reset_invalid_response');
-    expect(post).toHaveBeenCalledTimes(1);
+  test('directs cooldown failures to manual clearing, without another consume', async () => {
+    const { request, clear } = setup({ code: 'reset' });
+    clear.mockRejectedValue(new Error('offline'));
+    await expect(reset()).rejects.toMatchObject({ name: 'CodexQuotaResetAppliedError' });
+    expect(request).toHaveBeenCalledTimes(1);
   });
 
-  test('reports post-reset failure separately and never consumes another credit', async () => {
-    const calls: string[] = [];
-    spyOn(apiClient, 'post').mockImplementation(async (path, data) => {
-      calls.push((data as { url?: string }).url ?? path);
-      if (path === '/reset-quota') throw new Error('recovery unavailable');
-      return { status_code: 200, body: '{"code":"reset","windows_reset":1}' };
-    });
-    await expect(CODEX_CONFIG.resetQuota!(file, t)).rejects.toMatchObject({ name: 'CodexQuotaResetAppliedError' });
-    expect(calls).toEqual([CODEX_RATE_LIMIT_RESET_CREDITS_CONSUME_URL, '/reset-quota']);
+  test('rejects mismatched cooldown acknowledgements', async () => {
+    const { clear } = setup({ code: 'reset' });
+    clear.mockResolvedValue({ status: 'ok', auth_index: 'other-index', models: [] });
+    await expect(reset()).rejects.toMatchObject({ name: 'CodexQuotaResetAppliedError' });
   });
 
-  test('does not clear cooldown on a different connection after a reset completes', async () => {
-    const post = spyOn(apiClient, 'post').mockImplementation(async () => {
-      useQuotaStore.getState().clearQuotaCache();
-      return { status_code: 200, body: '{"code":"reset","windows_reset":1}' };
-    });
-    await expect(CODEX_CONFIG.resetQuota!(file, t)).rejects.toThrow();
-    expect(post).toHaveBeenCalledTimes(1);
+  test('does not clear after connection changes during redemption', async () => {
+    const { clear } = setup({ code: 'reset' });
+    const revision = spyOn(apiClient, 'getConnectionRevision')
+      .mockReturnValueOnce(1)
+      .mockReturnValue(2);
+    mocks.push(revision);
+    await expect(reset()).rejects.toMatchObject({ name: 'CodexQuotaResetAppliedError' });
+    expect(clear).not.toHaveBeenCalled();
   });
 });

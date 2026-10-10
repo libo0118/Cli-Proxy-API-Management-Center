@@ -62,7 +62,9 @@ export function parseQoderQuota(value: unknown, authIndex: string): QoderQuotaDa
 
 export async function fetchQoderQuota(authIndex: string): Promise<QoderQuotaData> {
   return parseQoderQuota(
-    await apiClient.get('/plugins/qoder/credits', { params: { auth_index: authIndex } }),
+    await apiClient.get(apiClient.customManagementUrl('/plugins/qoder/credits'), {
+      params: { auth_index: authIndex },
+    }),
     authIndex
   );
 }

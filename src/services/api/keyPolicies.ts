@@ -148,10 +148,13 @@ export function normalizePolicyReport(data: WireReport): PolicyReport {
   };
 }
 export const keyPoliciesApi = {
-  get: async () => normalizePolicyReport(await apiClient.get<WireReport>('/key-policies')),
+  get: async () =>
+    normalizePolicyReport(
+      await apiClient.get<WireReport>(apiClient.customManagementUrl('/key-policies'))
+    ),
   save: (revision: number, policy: KeyPolicy) =>
     apiClient.put(
-      '/key-policies/' + encodeURIComponent(policy.keyId),
+      apiClient.customManagementUrl('/key-policies/' + encodeURIComponent(policy.keyId)),
       serializePolicy(revision, policy)
     ),
 };

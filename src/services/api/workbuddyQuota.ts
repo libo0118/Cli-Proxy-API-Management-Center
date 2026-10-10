@@ -61,7 +61,9 @@ export function parseWorkBuddyQuota(value: unknown, authIndex: string): WorkBudd
 
 export async function fetchWorkBuddyQuota(authIndex: string): Promise<WorkBuddyQuotaData> {
   return parseWorkBuddyQuota(
-    await apiClient.get('/plugins/workbuddy/credits', { params: { auth_index: authIndex } }),
+    await apiClient.get(apiClient.customManagementUrl('/plugins/workbuddy/credits'), {
+      params: { auth_index: authIndex },
+    }),
     authIndex
   );
 }
