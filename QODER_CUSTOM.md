@@ -20,4 +20,6 @@ Keep `upstream` pointed at `router-for-me/Cli-Proxy-API-Management-Center` and `
 4. Run `bun install --frozen-lockfile` and `bun run verify`.
 5. Back up the existing management page, then deploy `dist/index.html` as `management.html` and verify both pages in a browser.
 
+Preserve ownership and permissions when replacing the page, but use a fresh modification time. Copying the old file's mtime can make changed content return 304 to an old `If-Modified-Since` request. Verify the regular URL returns the new page with that old validator, and refresh only that URL's CDN cache when necessary.
+
 For a custom deployment, disable CPA's automatic official panel replacement (`remote-management.disable-auto-update-panel: true`). Re-enable it only when the official panel contains the required functionality. Do not commit server configuration, auth files, management keys or build caches.
